@@ -4,9 +4,9 @@ This repository demonstrates a minimal workshop layout for the **Datalab** provi
 
 ## Quick navigation
 
-- Start with the [Overview](content/00-overview.md)
-- Try the [Example](content/01-example.md)
-- Finish with the [Summary](content/99-summary.md)
+- Start with the [Overview](workshop/content/00-overview.md)
+- Try the [Example](workshop/content/01-example.md)
+- Finish with the [Summary](workshop/content/99-summary.md)
 
 ## Data
 

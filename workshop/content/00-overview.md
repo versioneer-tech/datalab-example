@@ -2,7 +2,7 @@
 
 Welcome! These pages guide you through a short, hands‑on workflow using a simple folder layout:
 
-- `content/` contains the instructions you are reading right now.
+- `workshop/content/` contains the instructions you are reading right now.
 - `data/` contains two GeoTIFF files used in the example.
 
 ## Copying commands into the terminal
