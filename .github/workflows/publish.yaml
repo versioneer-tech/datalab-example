@@ -1,0 +1,69 @@
+name: Publish Datalab
+
+on:
+  push:
+    tags:
+      - "[0-9]+\\.[0-9]+"
+      - "[0-9]+\\.[0-9]+-alpha\\.[0-9]+"
+      - "[0-9]+\\.[0-9]+-beta\\.[0-9]+"
+      - "[0-9]+\\.[0-9]+-rc\\.[0-9]+"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      REGISTRY: ghcr.io
+      OWNER: ${{ github.repository_owner }}
+      IMAGE_NAME: ${{ github.event.repository.name }}
+      TAG: ${{ github.ref_name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate layout
+        run: |
+          test -d content || { echo "ERROR: missing content/"; exit 1; }
+          test -d data    || { echo "ERROR: missing data/"; exit 1; }
+          echo "Will package:"
+          find content -maxdepth 1 -type f -print || true
+          find data -maxdepth 1 -type f -print || true
+
+      - name: Install imgpkg
+        run: |
+          curl -L https://carvel.dev/install.sh | bash
+          imgpkg version
+
+      - name: Log in to GHCR (Docker creds used by imgpkg)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push :$TAG (imgpkg)
+        shell: bash
+        run: |
+          set -euo pipefail
+          IMAGE_REPO="${REGISTRY}/${OWNER}/${IMAGE_NAME}"
+          IMAGE="${IMAGE_REPO}:${TAG}"
+          echo "Pushing ${IMAGE}"
+          imgpkg push --image "${IMAGE}" -f content -f data
+          echo "Pushed ${IMAGE}"
+
+      - name: Also push :latest for stable tags
+        shell: bash
+        run: |
+          set -euo pipefail
+          IMAGE_REPO="${REGISTRY}/${OWNER}/${IMAGE_NAME}"
+          # If this is a stable tag like 1.2 (no pre-release suffix), also push :latest
+          if [[ "${TAG}" =~ ^[0-9]+\.[0-9]+$ ]]; then
+            echo "Stable tag ${TAG} detected -> pushing :latest"
+            imgpkg push --image "${IMAGE_REPO}:latest" -f content -f data
+          else
+            echo "Pre-release tag ${TAG} detected -> skip :latest"
+          fi
