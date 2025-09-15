@@ -52,7 +52,7 @@ jobs:
           IMAGE_REPO="${REGISTRY}/${OWNER}/${IMAGE_NAME}"
           IMAGE="${IMAGE_REPO}:${TAG}"
           echo "Pushing ${IMAGE}"
-          imgpkg push --image "${IMAGE}" -f content -f data
+          imgpkg push --image "${IMAGE}" -f .
           echo "Pushed ${IMAGE}"
 
       - name: Also push :latest for stable tags
