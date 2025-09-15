@@ -1,5 +1,5 @@
 ---
-title: Example: inspect, process, and move data
+title: Example - inspect, process, and move data
 ---
 
 In this example you’ll (1) inspect local files, (2) run a small Python check with **rasterio**, and (3) interact with a public S3 bucket. Your environment has **Python**, **AWS CLI**, and **rclone** available (Python starts with a minimal standard library).
