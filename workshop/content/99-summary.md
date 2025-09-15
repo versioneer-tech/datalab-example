@@ -1,4 +1,6 @@
-# Summary
+---
+title: Summary
+---
 
 You explored a small but realistic layout for a Datalab workspace:
 

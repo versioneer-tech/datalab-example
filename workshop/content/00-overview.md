@@ -1,4 +1,6 @@
-# Overview
+---
+title: Overview
+---
 
 Welcome! These pages guide you through a short, hands‑on workflow using a simple folder layout:
 
